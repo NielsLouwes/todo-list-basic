@@ -4,19 +4,22 @@ import ToDo from './components/ToDo';
 import FilterButton from './components/FilterButton';
 import Form from './components/Form';
 
-function App({tasks}) {
+function App(props) {
+  const [tasks, setTasks] = useState(props.tasks);
 
   const taskList = tasks.map(task => (
-    <ToDo 
-      id={task.id}
-      key={task.id}
-      name={task.name}
-      completed={task.completed}
-    />
-  ));
+    <ToDo
+        id={task.id}
+        name={task.name}
+        completed={task.completed}
+        key={task.id}
+      />
+    )
+  );
 
   function addTask(name) {
-    alert(name);
+    const newTask = { id: "id", name: name, completed: false };
+    setTasks([...tasks, newTask]);
   }
 
 
