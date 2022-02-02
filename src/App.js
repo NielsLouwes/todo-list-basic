@@ -1,48 +1,50 @@
-import React, { useState } from 'react'
-import './App.css';
-import ToDo from './components/ToDo';
-import FilterButton from './components/FilterButton';
-import Form from './components/Form';
+import React, { useState } from "react";
+import "./App.css";
+import ToDo from "./components/ToDo";
+import FilterButton from "./components/FilterButton";
+import Form from "./components/Form";
 import { nanoid } from "nanoid"; //npm install nanoid - library that easily creates unique ids our for tasks
-
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
 
   function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map(task => {
+    const updatedTasks = tasks.map((task) => {
       //if this task has the same ID as the edited task
-      if(id === task.id){
+      if (id === task.id) {
         //use object spread to make new object
         //whose completed prop has been inverted
-        return {...task, completed: !task.completed}
+        return { ...task, completed: !task.completed };
       }
       return task;
     });
     setTasks(updatedTasks);
   }
 
-  const taskList = tasks.map(task => (
+  function deleteTask(id) {
+    const remainingTasks = tasks.filter((task) => id !== task.id);
+    setTasks(remainingTasks);
+  }
+
+  const taskList = tasks.map((task) => (
     <ToDo
-        id={task.id}
-        name={task.name}
-        completed={task.completed}
-        key={task.id}
-        toggleTaskCompleted={toggleTaskCompleted}
-      />
-    )
-  );
+      id={task.id}
+      name={task.name}
+      completed={task.completed}
+      key={task.id}
+      toggleTaskCompleted={toggleTaskCompleted}
+      deleteTask={deleteTask}
+    />
+  ));
 
   function addTask(name) {
     const newTask = { id: "todo" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
   }
   //the following deals with spelling of tasks vs. task based on 1 or more task remaining
-  const tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
+  const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   //this variable is there to count the tasks remaining based on the length of array "taskList" - defined in index.js
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
-
-
 
   return (
     <div className="todoapp stack-large">
@@ -65,16 +67,14 @@ function App(props) {
           <span className="visually-hidden"> tasks</span>
         </button>
       </div>
-      <h2 id="list-heading">
-        {headingText}
-      </h2>
-     
+      <h2 id="list-heading">{headingText}</h2>
+
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
       >
-       {taskList}
+        {taskList}
       </ul>
     </div>
   );
