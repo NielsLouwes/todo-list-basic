@@ -3,9 +3,24 @@ import './App.css';
 import ToDo from './components/ToDo';
 import FilterButton from './components/FilterButton';
 import Form from './components/Form';
+import { nanoid } from "nanoid"; //npm install nanoid - library that easily creates unique ids our for tasks
+
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+
+  function toggleTaskCompleted(id) {
+    const updatedTasks = tasks.map(task => {
+      //if this task has the same ID as the edited task
+      if(id === task.id){
+        //use object spread to make new object
+        //whose completed prop has been inverted
+        return {...task, completed: !task.completed}
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  }
 
   const taskList = tasks.map(task => (
     <ToDo
@@ -13,14 +28,20 @@ function App(props) {
         name={task.name}
         completed={task.completed}
         key={task.id}
+        toggleTaskCompleted={toggleTaskCompleted}
       />
     )
   );
 
   function addTask(name) {
-    const newTask = { id: "id", name: name, completed: false };
+    const newTask = { id: "todo" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
   }
+  //the following deals with spelling of tasks vs. task based on 1 or more task remaining
+  const tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
+  //this variable is there to count the tasks remaining based on the length of array "taskList" - defined in index.js
+  const headingText = `${taskList.length} ${tasksNoun} remaining`;
+
 
 
   return (
@@ -45,7 +66,7 @@ function App(props) {
         </button>
       </div>
       <h2 id="list-heading">
-        3 tasks remaining
+        {headingText}
       </h2>
      
       <ul
