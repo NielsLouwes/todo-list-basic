@@ -7,6 +7,15 @@ import { nanoid } from "nanoid"; //npm install nanoid - library that easily crea
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+  const [filter, setFilter] = useState('All');
+
+  const FILTER_MAP = {
+    All: () => true,
+    Active: task => !task.completed,
+    Completed: task => task.completed
+  }
+
+  const FILTER_NAMES = Object.keys(FILTER_MAP);
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
@@ -49,6 +58,15 @@ function App(props) {
     />
   ));
 
+  const filterList = FILTER_NAMES.map(name => (
+    <FilterButton 
+    key={name} 
+    name={name} 
+    isPressed={name === filter}
+    setFilter={setFilter}
+    />
+  ))
+
   function addTask(name) {
     const newTask = { id: "todo" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
@@ -63,24 +81,9 @@ function App(props) {
       <h1>To Do</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
-        <button type="button" className="btn toggle-btn" aria-pressed="true">
-          <span className="visually-hidden">Show </span>
-          <span>all</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Active</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Completed</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
+       {filterList}
       </div>
       <h2 id="list-heading">{headingText}</h2>
-
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
