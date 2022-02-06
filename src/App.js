@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { nanoid } from "nanoid"; //npm install nanoid - library that easily creates unique ids our for tasks
+
 import "./App.css";
 import ToDo from "./components/ToDo";
 import FilterButton from "./components/FilterButton";
 import Form from "./components/Form";
-import { nanoid } from "nanoid"; //npm install nanoid - library that easily creates unique ids our for tasks
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
@@ -78,12 +87,24 @@ function App(props) {
   //this variable is there to count the tasks remaining based on the length of array "taskList" - defined in index.js
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
 
+  const listHeadingRef = useRef(null);
+
+  const prevTaskLength = usePrevious(tasks.length);
+
+  useEffect(() => {
+    if (tasks.length - prevTaskLength === -1) {
+      listHeadingRef.current.focus();
+    }
+  }, [tasks.length, prevTaskLength]);
+
   return (
     <div className="todoapp stack-large">
       <h1>To Do</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">{filterList}</div>
-      <h2 id="list-heading">{headingText}</h2>
+      <h2 tabIndex="-1" ref={listHeadingRef} id="list-heading">
+        {headingText}
+      </h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
