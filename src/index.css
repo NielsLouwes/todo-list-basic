@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: "Josefin Sans", sans-serif;
 }
 
 *:focus {
-  outline: 3px dashed #228bec;
+  outline: 1px dashed #228bec;
   outline-offset: 0;
 }
 html {
@@ -61,7 +61,7 @@ body {
   max-width: 68rem;
   margin: 0 auto;
   font: 1.6rem/1.25 Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: black;
   color: #4d4d4d;
 }
 @media screen and (min-width: 620px) {
@@ -293,5 +293,3 @@ body {
 .c-cb > input[type="checkbox"]:checked + label::after {
   opacity: 1;
 }
-
-
