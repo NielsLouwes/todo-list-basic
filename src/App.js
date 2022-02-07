@@ -71,7 +71,7 @@ function App(props) {
     const newTask = { id: "todo" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
   }
-  //the following deals with spelling of tasks vs. task based on 1 or more task remaining
+  //the following deals with spelling of tasks vs. task based on 1 or more task remaining -very useful
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   //this variable is there to count the tasks remaining based on the length of array "taskList" - defined in index.js
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
